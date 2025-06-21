@@ -13,7 +13,7 @@ def createParser() -> argparse.ArgumentParser:
 
 
 def parseCsv(file_name: str) -> list|None:
-    data = None
+    data = []
     with open(file_name, 'r', encoding='utf-8') as file:
         data = list(csv.reader(file))
     return data
@@ -48,12 +48,12 @@ def filterCsv(data: list, condition: str) -> list|None:
     raise ValueError(f"Unsupported parameter in '--where' condition")
 
 
+
 def aggregateCsv(data: list, condition: str) -> tuple:
     col = None
     col_data = None
     headers = data[0]
     enum_headers = enumerate(headers)
-    result = []
     if "=" in condition:
         number_column = None
         col, col_data = condition.split("=")
@@ -74,6 +74,7 @@ def aggregateCsv(data: list, condition: str) -> tuple:
         else:
             raise ValueError(f"Operator for parameter '--aggregate' not supported or wrong")
     return col_data, result
+
 
 
 def orderCsv(data: list, condition: str) -> list|None:
@@ -119,14 +120,16 @@ if __name__ == '__main__':
     else:
         raise ValueError(f"There must be file name")
     if namespace.where:
-        data = filterCsv(data, namespace.where)
-    if namespace.aggregate:
-        if len(data) == 1:
-            print("No results")
+        if len(data) > 1:
+            data = filterCsv(data, namespace.where)
         else:
+            raise ValueError("There is no data")
+    if namespace.aggregate:
+        if len(data) > 1:
             aggr_func, aggr_result = aggregateCsv(data, namespace.aggregate)
             data = [[aggr_func], [aggr_result]]
     if namespace.order_by:
-        data = orderCsv(data, namespace.order_by)
+        if len(data) > 1:
+            data = orderCsv(data, namespace.order_by)
     table = tabulate(data[1:], data[0], tablefmt="grid")
     print(table)
