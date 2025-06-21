@@ -15,8 +15,9 @@
 ### 1. Install requiremets.txt
 
 # Test 1
+```
 python main.py --file products.csv --where "rating>4.6" --aggregate "price=avg"
-
+```
 ```
 +-------+
 |   avg |
@@ -26,9 +27,9 @@ python main.py --file products.csv --where "rating>4.6" --aggregate "price=avg"
 ```
 
 # Test 2
-
+```
 python main.py --file products.csv --where "price<500" --order-by "price=desc"
-
+```
 ```
 +---------------+---------+---------+----------+
 | poco x5 pro   | xiaomi  |     299 |      4.4 |
