@@ -17,19 +17,19 @@
 # Test 1
 python main.py --file products.csv --where "rating>4.6" --aggregate "price=avg"
 
-'''
+```
 +-------+
 |   avg |
 +=======+
 |   999 |
 +-------+
-'''
+```
 
 # Test 2
 
 python main.py --file products.csv --where "price<500" --order-by "price=desc"
 
-'''
+```
 +---------------+---------+---------+----------+
 | poco x5 pro   | xiaomi  |     299 |      4.4 |
 +---------------+---------+---------+----------+
@@ -37,4 +37,4 @@ python main.py --file products.csv --where "price<500" --order-by "price=desc"
 +---------------+---------+---------+----------+
 | redmi 10c     | xiaomi  |     149 |      4.1 |
 +---------------+---------+---------+----------+
-'''
+```
