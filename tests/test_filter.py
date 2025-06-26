@@ -1,23 +1,20 @@
-from main import parseCsv, filterCsv, aggregateCsv
+from exceptions import OperatorError
+from main import parse_csv, filter_csv, aggregate_csv
 import pytest
 
 
-
 def test_file_is_ok():
-    res = parseCsv('products.csv')
+    res = parse_csv('products.csv')
     assert type(res) == list
 
 def test_file_is_not_ok():
     with pytest.raises(FileNotFoundError):
-        res = parseCsv('product.csv')
-
-
-
+        res = parse_csv('product.csv')
 
 def test_filter_string():
-    data = parseCsv('products.csv')
+    data = parse_csv('products.csv')
     condition = "brand=apple"
-    res = filterCsv(data, condition)
+    res = filter_csv(data, condition)
     estimate_result = [
         ["name","brand","price","rating"],
         ["iphone 15 pro","apple","999","4.9"],
@@ -27,11 +24,10 @@ def test_filter_string():
     ]
     assert res == estimate_result
 
-
 def test_filter_float():
-    data = parseCsv('products.csv')
+    data = parse_csv('products.csv')
     condition = "rating>4.5"
-    res = filterCsv(data, condition)
+    res = filter_csv(data, condition)
     estimate_result = [
         ["name","brand","price","rating"],
         ["iphone 15 pro","apple","999","4.9"],
@@ -42,11 +38,10 @@ def test_filter_float():
     ]
     assert res == estimate_result
 
-
 def test_filter_int():
-    data = parseCsv('products.csv')
+    data = parse_csv('products.csv')
     condition = "price<500"
-    res = filterCsv(data, condition)
+    res = filter_csv(data, condition)
     estimate_result = [
         ["name","brand","price","rating"],
         ["redmi note 12","xiaomi","199","4.6"],
@@ -57,18 +52,16 @@ def test_filter_int():
     ]
     assert res == estimate_result
 
-
 def test_fiter_condition_not_ok():
-    with pytest.raises(ValueError):
-        data = parseCsv('products.csv')
+    with pytest.raises(OperatorError):
+        data = parse_csv('products.csv')
         condition = "price-500"
-        res = filterCsv(data, condition)
-
+        res = filter_csv(data, condition)
 
 def test_fiter_condition_wrong_column():
     with pytest.raises(ValueError):
-        data = parseCsv('products.csv')
+        data = parse_csv('products.csv')
         condition = "mice=500"
-        res = filterCsv(data, condition)
+        res = filter_csv(data, condition)
 
 

@@ -1,11 +1,12 @@
-from main import parseCsv, orderCsv
+from main import parse_csv, order_csv
+from exceptions import OperatorError, FunctionError
 import pytest
 
 
 def test_order_float_asc_ok():
-    data = parseCsv('products.csv')
+    data = parse_csv('products.csv')
     condition = "price=asc"
-    res = orderCsv(data, condition)
+    res = order_csv(data, condition)
     estimate_result = [
         ["name","brand","price","rating"],
         ["redmi 10c","xiaomi","149","4.1"],
@@ -23,9 +24,9 @@ def test_order_float_asc_ok():
 
 
 def test_order_float_desc_ok():
-    data = parseCsv('products.csv')
+    data = parse_csv('products.csv')
     condition = "price=desc"
-    res = orderCsv(data, condition)
+    res = order_csv(data, condition)
     estimate_result = [
         ["name","brand","price","rating"],
         ["galaxy s23 ultra","samsung","1199","4.8"],
@@ -42,9 +43,9 @@ def test_order_float_desc_ok():
     assert res == estimate_result
 
 def test_order_str_asc_ok():
-    data = parseCsv('products.csv')
+    data = parse_csv('products.csv')
     condition = "name=asc"
-    res = orderCsv(data[:4], condition)
+    res = order_csv(data[:4], condition)
     estimate_result = [
         ["name","brand","price","rating"],
         ["galaxy s23 ultra","samsung","1199","4.8"],
@@ -55,9 +56,9 @@ def test_order_str_asc_ok():
 
 
 def test_order_str_desc_ok():
-    data = parseCsv('products.csv')
+    data = parse_csv('products.csv')
     condition = "brand=desc"
-    res = orderCsv(data[:4], condition)
+    res = order_csv(data[:4], condition)
     estimate_result = [
         ["name","brand","price","rating"],
         ["redmi note 12","xiaomi","199","4.6"],
@@ -67,32 +68,28 @@ def test_order_str_desc_ok():
     assert res == estimate_result
 
 def test_order_wrong_func():
-    with pytest.raises(ValueError):
-        data = parseCsv('products.csv')
+    with pytest.raises(FunctionError):
+        data = parse_csv('products.csv')
         condition = "price=dess"
-        res = orderCsv(data, condition)
-
+        res = order_csv(data, condition)
 
 def test_order_wrong_operator():
-    with pytest.raises(ValueError):
-        data = parseCsv('products.csv')
+    with pytest.raises(OperatorError):
+        data = parse_csv('products.csv')
         condition = "price+desc"
-        res = orderCsv(data, condition)
-
+        res = order_csv(data, condition)
 
 def test_order_no_data():
-    data = parseCsv('products.csv')
+    data = parse_csv('products.csv')
     condition = "price=asc"
-    res = orderCsv([data[0]], condition)
+    res = order_csv([data[0]], condition)
     estimate_result = [
         ["name","brand","price","rating"],
     ]
     assert res == estimate_result
 
-
 def test_order_empty_data():
-    data = parseCsv('products.csv')
     condition = "price=asc"
-    res = orderCsv([[]], condition)
+    res = order_csv([[]], condition)
     estimate_result = [[]]
     assert res == estimate_result

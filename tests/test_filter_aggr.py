@@ -1,12 +1,11 @@
-from main import parseCsv, filterCsv, aggregateCsv
-import pytest
+from main import parse_csv, filter_csv, aggregate_csv
 
 
 def test_filter_aggr_ok():
-    data = parseCsv('products.csv')
+    data = parse_csv('products.csv')
     condition = "brand=apple"
-    res_f = filterCsv(data, condition)
+    res_f = filter_csv(data, condition)
     condition = "price=min"
-    res = aggregateCsv(res_f, condition)
+    res = aggregate_csv(res_f, condition)
     estimate_result = ("min", 429)
     assert res == estimate_result

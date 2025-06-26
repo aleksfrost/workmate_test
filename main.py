@@ -13,7 +13,7 @@ def createParser() -> argparse.ArgumentParser:
     return parser
 
 
-def parseCsv(file_name: str) -> list | None:
+def parse_csv(file_name: str) -> list | None:
     data = []
     with open(file_name, 'r', encoding='utf-8') as file:
         data = list(csv.reader(file))
@@ -111,11 +111,11 @@ def order_csv(data: list, condition: str) -> list | None:
                     result = sorted(
                         data[1:], key=lambda x: x[number_column], reverse=True)
             else:
-                raise ValueError(
+                raise FunctionError(
                     f"Function for parameter '--order-by' not supported or wrong")
             result.insert(0, headers)
         else:
-            raise ValueError(
+            raise OperatorError(
                 f"Operator for parameter '--order-by' not supported or wrong")
     return result
 
@@ -124,7 +124,7 @@ if __name__ == '__main__':
     namespace = parser.parse_args()
 
     if namespace.file:
-        data = parseCsv(namespace.file)
+        data = parse_csv(namespace.file)
     else:
         raise ValueError(f"There must be file name")
     if namespace.where:

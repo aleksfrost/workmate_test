@@ -1,4 +1,6 @@
-/__pycache__/
+__pycache__/
+tests/__pycache__/
+tests/.pytest_cache/
 /.venv/
 /.pytest_cache/
 /htmlcov/
