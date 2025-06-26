@@ -1,6 +1,7 @@
 import pytest
 from exceptions import FunctionError, OperatorError
-from main import parse_csv, aggregate_csv
+from file_parser import parse_csv
+from file_aggregate import aggregate_csv
 
 
 

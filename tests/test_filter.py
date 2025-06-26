@@ -1,5 +1,6 @@
 from exceptions import OperatorError
-from main import parse_csv, filter_csv, aggregate_csv
+from file_filter import filter_csv
+from file_parser import parse_csv
 import pytest
 
 

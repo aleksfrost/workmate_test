@@ -1,4 +1,5 @@
-from main import parse_csv, order_csv
+from main import parse_csv
+from file_order import order_csv
 from exceptions import OperatorError, FunctionError
 import pytest
 
