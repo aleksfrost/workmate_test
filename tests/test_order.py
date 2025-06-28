@@ -1,13 +1,12 @@
-from main import parse_csv
-from file_order import order_csv
+from data_order_by import DataOrderBy
 from exceptions import OperatorError, FunctionError
 import pytest
 
 
-def test_order_float_asc_ok():
-    data = parse_csv('products.csv')
+def test_order_float_asc_ok(full_data):
+    data = full_data
     condition = "price=asc"
-    res = order_csv(data, condition)
+    res = DataOrderBy(data, condition).data_fuction()
     estimate_result = [
         ["name","brand","price","rating"],
         ["redmi 10c","xiaomi","149","4.1"],
@@ -24,10 +23,10 @@ def test_order_float_asc_ok():
     assert res == estimate_result
 
 
-def test_order_float_desc_ok():
-    data = parse_csv('products.csv')
+def test_order_float_desc_ok(full_data):
+    data = full_data
     condition = "price=desc"
-    res = order_csv(data, condition)
+    res = DataOrderBy(data, condition).data_fuction()
     estimate_result = [
         ["name","brand","price","rating"],
         ["galaxy s23 ultra","samsung","1199","4.8"],
@@ -43,10 +42,10 @@ def test_order_float_desc_ok():
     ]
     assert res == estimate_result
 
-def test_order_str_asc_ok():
-    data = parse_csv('products.csv')
+def test_order_str_asc_ok(not_full_data):
+    data = not_full_data
     condition = "name=asc"
-    res = order_csv(data[:4], condition)
+    res = DataOrderBy(data, condition).data_fuction()
     estimate_result = [
         ["name","brand","price","rating"],
         ["galaxy s23 ultra","samsung","1199","4.8"],
@@ -56,10 +55,10 @@ def test_order_str_asc_ok():
     assert res == estimate_result
 
 
-def test_order_str_desc_ok():
-    data = parse_csv('products.csv')
+def test_order_str_desc_ok(not_full_data):
+    data = not_full_data
     condition = "brand=desc"
-    res = order_csv(data[:4], condition)
+    res = DataOrderBy(data[:4], condition).data_fuction()
     estimate_result = [
         ["name","brand","price","rating"],
         ["redmi note 12","xiaomi","199","4.6"],
@@ -68,29 +67,35 @@ def test_order_str_desc_ok():
     ]
     assert res == estimate_result
 
-def test_order_wrong_func():
+def test_order_wrong_func(not_full_data):
     with pytest.raises(FunctionError):
-        data = parse_csv('products.csv')
+        data = not_full_data
         condition = "price=dess"
-        res = order_csv(data, condition)
+        res = DataOrderBy(data, condition).data_fuction()
+        return res
 
-def test_order_wrong_operator():
+def test_order_wrong_operator(not_full_data):
     with pytest.raises(OperatorError):
-        data = parse_csv('products.csv')
+        data = not_full_data
         condition = "price+desc"
-        res = order_csv(data, condition)
+        res = DataOrderBy(data, condition).data_fuction()
+        return res
 
-def test_order_no_data():
-    data = parse_csv('products.csv')
+def test_order_no_data(header_only):
+    data = header_only
     condition = "price=asc"
-    res = order_csv([data[0]], condition)
+    res = DataOrderBy([data[0]], condition).data_fuction()
     estimate_result = [
         ["name","brand","price","rating"],
     ]
     assert res == estimate_result
 
-def test_order_empty_data():
+def test_order_empty_data(header_and_one):
+    data = header_and_one
     condition = "price=asc"
-    res = order_csv([[]], condition)
-    estimate_result = [[]]
+    res = DataOrderBy(data, condition).data_fuction()
+    estimate_result = [
+        ["name","brand","price","rating"],
+        ["iphone 15 pro","apple","999","4.9"],
+    ]
     assert res == estimate_result

@@ -1,5 +1,5 @@
 import argparse
-from main import createParser
+from args_parser import createParser
 
 
 def test_percer():

@@ -1,21 +1,12 @@
 from exceptions import OperatorError
-from file_filter import filter_csv
-from file_parser import parse_csv
+from data_filter import DataFilter
 import pytest
 
 
-def test_file_is_ok():
-    res = parse_csv('products.csv')
-    assert type(res) == list
-
-def test_file_is_not_ok():
-    with pytest.raises(FileNotFoundError):
-        res = parse_csv('product.csv')
-
-def test_filter_string():
-    data = parse_csv('products.csv')
+def test_filter_string(full_data):
+    data = full_data
     condition = "brand=apple"
-    res = filter_csv(data, condition)
+    res = DataFilter(data, condition).data_fuction()
     estimate_result = [
         ["name","brand","price","rating"],
         ["iphone 15 pro","apple","999","4.9"],
@@ -25,10 +16,10 @@ def test_filter_string():
     ]
     assert res == estimate_result
 
-def test_filter_float():
-    data = parse_csv('products.csv')
+def test_filter_float(full_data):
+    data = full_data
     condition = "rating>4.5"
-    res = filter_csv(data, condition)
+    res = DataFilter(data, condition).data_fuction()
     estimate_result = [
         ["name","brand","price","rating"],
         ["iphone 15 pro","apple","999","4.9"],
@@ -39,10 +30,10 @@ def test_filter_float():
     ]
     assert res == estimate_result
 
-def test_filter_int():
-    data = parse_csv('products.csv')
+def test_filter_int(full_data):
+    data = full_data
     condition = "price<500"
-    res = filter_csv(data, condition)
+    res = DataFilter(data, condition).data_fuction()
     estimate_result = [
         ["name","brand","price","rating"],
         ["redmi note 12","xiaomi","199","4.6"],
@@ -53,16 +44,37 @@ def test_filter_int():
     ]
     assert res == estimate_result
 
-def test_fiter_condition_not_ok():
+def test_fiter_condition_not_ok(full_data):
     with pytest.raises(OperatorError):
-        data = parse_csv('products.csv')
+        data = full_data
         condition = "price-500"
-        res = filter_csv(data, condition)
+        res = DataFilter(data, condition).data_fuction()
+        return res
 
-def test_fiter_condition_wrong_column():
+def test_fiter_condition_wrong_column(full_data):
     with pytest.raises(ValueError):
-        data = parse_csv('products.csv')
+        data = full_data
         condition = "mice=500"
-        res = filter_csv(data, condition)
+        res = DataFilter(data, condition).data_fuction()
+        return res
+
+def test_filter_header(header_only):
+    data = header_only
+    condition = "brand=apple"
+    res = DataFilter(data, condition).data_fuction()
+    estimate_result = [
+        ["name","brand","price","rating"],
+    ]
+    assert res == estimate_result
+
+def test_filter_header_and_one(header_and_one):
+    data = header_and_one
+    condition = "rating>4.5"
+    res = DataFilter(data, condition).data_fuction()
+    estimate_result = [
+        ["name","brand","price","rating"],
+        ["iphone 15 pro","apple","999","4.9"],
+    ]
+    assert res == estimate_result
 
 

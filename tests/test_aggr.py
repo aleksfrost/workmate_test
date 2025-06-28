@@ -1,40 +1,33 @@
 import pytest
 from exceptions import FunctionError, OperatorError
-from file_parser import parse_csv
-from file_aggregate import aggregate_csv
+from data_aggregate import DataAggregate
 
 
+@pytest.mark.parametrize(
+        "cond, result",
+        [
+            ("price=avg", ("avg", 602.0)),
+            ("price=min", ("min", 149)),
+            ("rating=max", ("max", 4.9))
+        ]
 
-def test_aggregation_avg():
-    data = parse_csv('products.csv')
-    condition = "price=avg"
-    res = aggregate_csv(data, condition)
-    assert res == ("avg", 602.0)
-
-
-def test_aggregation_min():
-    data = parse_csv('products.csv')
-    condition = "price=min"
-    res = aggregate_csv(data, condition)
-    assert res == ("min", 149)
-
-
-def test_aggregation_max():
-    data = parse_csv('products.csv')
-    condition = "rating=max"
-    res = aggregate_csv(data, condition)
-    assert res == ("max", 4.9)
+)
+def test_aggregation(full_data, cond, result):
+    res = DataAggregate(full_data, cond).data_fuction()
+    assert res == result
 
 
-def test_aggregation_wrong_func():
-    with pytest.raises(OperatorError):
-        data = parse_csv('products.csv')
+def test_aggregation_wrong_func(not_full_data):
+    with pytest.raises(FunctionError):
+        data = not_full_data
         condition = "rating=count"
-        res = aggregate_csv(data, condition)
+        res = DataAggregate(data, condition).data_fuction()
+        return res
 
 
-def test_aggregation_wrong_column():
+def test_aggregation_wrong_column(not_full_data):
     with pytest.raises(ValueError):
-        data = parse_csv('products.csv')
+        data = not_full_data
         condition = "brand=avg"
-        res = aggregate_csv(data, condition)
+        res = DataAggregate(data, condition).data_fuction()
+        return res
